@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug (stlink)",
+            "cwd": "${workspaceRoot}",
+            "executable": "./target/thumbv7em-none-eabihf/debug/simple_application_i2c",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "stlink",
+            "preLaunchTask": "Cargo Build (debug)",
+            "stlinkPath": "C:/ST/STM32CubeIDE_1.15.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.1.300.202403291623/tools/bin/ST-LINK_gdbserver.exe",
+            "device": "STM32F401RET6",
+            "svdFile": "C:/ST/STM32CubeIDE_1.15.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.productdb.debug_2.1.300.202404050853/resources/cmsis/STMicroelectronics_CMSIS_SVD/STM32F401.svd"
+        }
+    ]
+ }

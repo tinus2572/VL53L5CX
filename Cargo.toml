@@ -1,0 +1,19 @@
+[package]
+name = "vl53l5cx"
+version = "0.1.0"
+edition = "2021"
+description = "This crate provides a platform agnostic driver for the ST VL53L5CX proximity sensor."
+readme = "README.md"
+license = "BSD 3-Clause License"
+exclude = [
+    "target/debug/*"
+    ]
+keywords = []
+
+[dependencies]
+embedded-hal = "1.0.0"
+bitfield = "0.15.0"
+
+[dependencies.stm32f4xx-hal]
+version = "0.20.0"
+features = ["stm32f401"]

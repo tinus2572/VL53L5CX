@@ -1,0 +1,43 @@
+[package]
+authors = ["quentin chavigny turbe <quentin.chavignyturbe@st.com>"]
+edition = "2021"
+readme = "README.md"
+name = "detection_thresholds_i2c"
+version = "0.1.0"
+
+[dependencies]
+cortex-m = "0.7.7"
+cortex-m-rt = "0.7.3"
+cortex-m-semihosting = "0.5.0"
+panic-halt = "0.2.0"
+embedded-hal = "1.0.0"
+embedded-hal-bus = "0.2.0"
+vl53l5cx = {path = "../../"}
+
+[dependencies.stm32f4xx-hal]
+version = "0.20.0"
+features = ["stm32f401"]
+
+[[bin]]
+name = "detection_thresholds_i2c"
+test = false
+bench = false
+
+[profile.release]
+codegen-units = 1 # better optimizations
+debug = true # symbols are nice and they don't increase the size on Flash
+lto = true # better optimizations
+
+# All macro below are used to configure the sensor output. User can
+# define some macros if he wants to disable selected output, in order to reduce
+# I2C access.
+[features]
+VL53L5CX_DISABLE_AMBIENT_PER_SPAD = []
+VL53L5CX_DISABLE_NB_SPADS_ENABLED = []
+VL53L5CX_DISABLE_NB_TARGET_DETECTED = []
+VL53L5CX_DISABLE_SIGNAL_PER_SPAD = []
+VL53L5CX_DISABLE_RANGE_SIGMA_MM = []
+VL53L5CX_DISABLE_DISTANCE_MM = []
+VL53L5CX_DISABLE_REFLECTANCE_PERCENT = []
+VL53L5CX_DISABLE_TARGET_STATUS = []
+VL53L5CX_DISABLE_MOTION_INDICATOR = []

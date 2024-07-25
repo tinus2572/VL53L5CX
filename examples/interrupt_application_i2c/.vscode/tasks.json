@@ -1,0 +1,39 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Cargo Build (debug)",
+            "type": "process",
+            "command": "cargo",
+            "args": [
+                "build",
+                // "--features=VL53L5CX_DISABLE_AMBIENT_PER_SPAD"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Cargo Build (release)",
+            "type": "process",
+            "command": "cargo",
+            "args": ["build", "--release"],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "Cargo Clean",
+            "type": "process",
+            "command": "cargo",
+            "args": ["clean"],
+            "problemMatcher": [],
+            "group": "build"
+        },
+    ]
+}
