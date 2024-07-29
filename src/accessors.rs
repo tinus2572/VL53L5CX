@@ -4,7 +4,7 @@ use utils::*;
 use crate::{consts, utils, BusOperation, Vl53l5cx, Error, OutputPin, DelayNs};
 
 
-impl<B: BusOperation, LPN: OutputPin, T: DelayNs> Vl53l5cx<B, LPN, T> {
+impl<B: BusOperation, LPN: OutputPin, RST: OutputPin, T: DelayNs> Vl53l5cx<B, LPN, RST, T> {
     
     /// This function gets the current resolution (4x4 or 8x8).
     /// 

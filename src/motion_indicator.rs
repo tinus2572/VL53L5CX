@@ -146,7 +146,7 @@ pub(crate) fn from_motion_configuration_to_u8(src: &MotionConfiguration, dst: &m
     dst[124..156].copy_from_slice(&src.indicator_format_2);
 }
 
-impl<B: BusOperation, LPN: OutputPin, T: DelayNs> Vl53l5cx<B, LPN, T> {
+impl<B: BusOperation, LPN: OutputPin, RST: OutputPin, T: DelayNs> Vl53l5cx<B, LPN, RST, T> {
     /// This function is used to initialized the motion indicator. By default, indicator is programmed to monitor movements between 400mm and 1500mm.
     /// 
     /// # Arguments

@@ -44,13 +44,14 @@ impl<P: I2c> BusOperation for Vl53l5cxI2C<P> {
     }
 }
 
-impl<P, LPN, T> Vl53l5cx<Vl53l5cxI2C<P>, LPN, T>
+impl<P, LPN, RST, T> Vl53l5cx<Vl53l5cxI2C<P>, LPN, RST, T>
     where
     P: I2c,
     LPN: OutputPin,
+    RST: OutputPin,
     T: DelayNs
 {
-    pub fn new_i2c(i2c: P, lpn_pin: LPN, tim: T) -> Result<Self, Error<P::Error>> 
+    pub fn new_i2c(i2c: P, lpn_pin: LPN, i2c_rst_pin: RST, tim: T) -> Result<Self, Error<P::Error>> 
     {
         Ok(Vl53l5cx { 
             temp_buffer: [0; VL53L5CX_TEMPORARY_BUFFER_SIZE],
@@ -60,6 +61,7 @@ impl<P, LPN, T> Vl53l5cx<Vl53l5cxI2C<P>, LPN, T>
             data_read_size: 0,
             is_auto_stop_enabled: false,
             lpn_pin: lpn_pin,
+            i2c_rst_pin: i2c_rst_pin,
             bus: Vl53l5cxI2C::new(i2c),
             tim: tim,
             chunk_size: I2C_CHUNK_SIZE
@@ -74,6 +76,14 @@ impl<P, LPN, T> Vl53l5cx<Vl53l5cxI2C<P>, LPN, T>
         
         Ok(())
     }
+    
+    pub fn i2c_reset(&mut self) -> Result<(), Error<P::Error>> {
+        self.i2c_rst_pin.set_low().unwrap();
+        
+        Ok(())
+    }
+
+
 
     pub fn init_sensor(&mut self, address: u8) -> Result<(), Error<P::Error>>{
         self.off()?;

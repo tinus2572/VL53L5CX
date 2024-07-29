@@ -5,7 +5,7 @@ use utils::*;
 
 use crate::{buffers, consts, utils, BlockHeader, BusOperation, Error, Vl53l5cx, OutputPin, DelayNs};
 
-impl<B: BusOperation, LPN: OutputPin, T: DelayNs> Vl53l5cx<B, LPN, T> {
+impl<B: BusOperation, LPN: OutputPin, RST: OutputPin, T: DelayNs> Vl53l5cx<B, LPN, RST, T> {
     fn poll_for_answer_xtalk(&mut self, address: u16, expected_val: u8) -> Result<(), Error<B::Error>> {
         let mut timeout: u8 = 0;
         while timeout <= 200 {

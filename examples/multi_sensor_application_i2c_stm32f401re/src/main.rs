@@ -17,7 +17,7 @@ use stm32f4xx_hal::{
     gpio::{
         Output, 
         Pin, 
-        PinState::High,
+        PinState::{High, Low},
         gpioa, 
         gpiob,
         gpioc,
@@ -119,8 +119,13 @@ fn main() -> ! {
     let gpioc: gpioc::Parts = dp.GPIOC.split();
     
     let _pwr_pin_top: Pin<'B', 0, Output> = gpiob.pb0.into_push_pull_output_in_state(High);
+    
     let _pwr_pin_left: Pin<'A', 0, Output> = gpioa.pa0.into_push_pull_output_in_state(High);
     let _pwr_pin_right: Pin<'C', 0, Output> = gpioc.pc0.into_push_pull_output_in_state(High);
+
+    let i2c_rst_pin_top: Pin<'B', 3, Output> = gpiob.pb3.into_push_pull_output_in_state(Low);
+    let i2c_rst_pin_left: Pin<'A', 8, Output> = gpioa.pa8.into_push_pull_output_in_state(Low);
+    let i2c_rst_pin_right: Pin<'A', 9, Output> = gpioa.pa9.into_push_pull_output_in_state(Low);
 
     let lpn_pin_top: Pin<'B', 4, Output> = gpiob.pb4.into_push_pull_output_in_state(High);
     let lpn_pin_left: Pin<'B', 10, Output> = gpiob.pb10.into_push_pull_output_in_state(High);
@@ -145,13 +150,13 @@ fn main() -> ! {
     let i2c: StmI2c<I2C1> = I2c1::new(
         dp.I2C1,
         (scl, sda),
-        Mode::Standard{frequency:200.kHz()},
+        Mode::Standard{frequency:400.kHz()},
         &clocks);
         
     let i2c_bus: RefCell<StmI2c<I2C1>> = RefCell::new(i2c);
-    let address_top: SevenBitAddress = 0x10;
-    let address_left: SevenBitAddress = 0x11;
-    let address_right: SevenBitAddress = 0x12;
+    let address_top: SevenBitAddress = 0x0;
+    let address_left: SevenBitAddress = 0x1;
+    let address_right: SevenBitAddress = 0x2;
 
     let i2c_top = RefCellDevice::new(&i2c_bus);
     let i2c_left = RefCellDevice::new(&i2c_bus);
@@ -160,14 +165,17 @@ fn main() -> ! {
     let mut sensor_top = Vl53l5cx::new_i2c(
         i2c_top, 
         lpn_pin_top,
+        i2c_rst_pin_top,
         tim_top).unwrap();
     let mut sensor_left = Vl53l5cx::new_i2c(
         i2c_left, 
         lpn_pin_left,
+        i2c_rst_pin_left,
         tim_left).unwrap();
     let mut sensor_right = Vl53l5cx::new_i2c(
         i2c_right, 
         lpn_pin_right,
+        i2c_rst_pin_right,
         tim_right).unwrap();
 
     sensor_top.off().unwrap();

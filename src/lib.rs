@@ -22,6 +22,7 @@
 
 //! let _pwr_pin = gpiob.pb0.into_push_pull_output_in_state(High);
 //! let lpn_pin = gpiob.pb4.into_push_pull_output_in_state(High);
+//! let i2c_rst_pin = gpiob.pb3.into_push_pull_output_in_state(Low);
 //! let tx_pin = gpioa.pa2.into_alternate();
 //!     
 //! let mut tx = dp.USART2.tx(
@@ -47,6 +48,7 @@
 //! let mut sensor_top = Vl53l5cx::new_i2c(
     //! RefCellDevice::new(&i2c_bus), 
         //! lpn_pin,
+        //! i2c_rst_pin,
         //! tim_top
     //! ).unwrap();
 //! 
@@ -118,7 +120,7 @@ bitfield! {
     pub bh_type, set_bh_type: 3, 0;
 }
 
-pub struct Vl53l5cx<B: BusOperation, LPN: OutputPin, T: DelayNs> {
+pub struct Vl53l5cx<B: BusOperation, LPN: OutputPin, RST: OutputPin, T: DelayNs> {
     pub(crate) temp_buffer: [u8;  VL53L5CX_TEMPORARY_BUFFER_SIZE],
     pub(crate) offset_data: [u8;  VL53L5CX_OFFSET_BUFFER_SIZE],
     pub(crate) xtalk_data: [u8; VL53L5CX_XTALK_BUFFER_SIZE],
@@ -127,6 +129,7 @@ pub struct Vl53l5cx<B: BusOperation, LPN: OutputPin, T: DelayNs> {
     pub(crate) is_auto_stop_enabled: bool,
 
     pub(crate) lpn_pin: LPN,
+    pub(crate) i2c_rst_pin: RST,
     
     pub(crate) chunk_size: usize,
     pub(crate) bus: B,
@@ -212,7 +215,7 @@ impl ResultsData {
     }
 }
 
-impl<B: BusOperation, LPN: OutputPin, T: DelayNs> Vl53l5cx<B, LPN, T> {
+impl<B: BusOperation, LPN: OutputPin, RST: OutputPin, T: DelayNs> Vl53l5cx<B, LPN, RST, T> {
     /// Inner function, not available outside this file. 
     /// This function is used to wait for an answer from VL53L5CX sensor.
     pub(crate) fn poll_for_answer(&mut self, size: usize, pos: u8, reg: u16, mask: u8, expected_val: u8) -> Result<(), Error<B::Error>> {

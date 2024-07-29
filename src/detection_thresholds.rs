@@ -54,7 +54,7 @@ fn from_thresholds_to_u8(src: &[DetectionThresholds], dst: &mut [u8]) {
     }
 }
 
-impl<B: BusOperation, LPN: OutputPin, T: DelayNs> Vl53l5cx<B, LPN, T> {
+impl<B: BusOperation, LPN: OutputPin, RST: OutputPin, T: DelayNs> Vl53l5cx<B, LPN, RST, T> {
 
     /// This function allows indicating if the detection thresholds are enabled.
     /// 

@@ -22,6 +22,7 @@ let gpiob = dp.GPIOB.split();
 
 let _pwr_pin = gpiob.pb0.into_push_pull_output_in_state(High);
 let lpn_pin = gpiob.pb4.into_push_pull_output_in_state(High);
+let i2c_rst_pin = gpiob.pb3.into_push_pull_output_in_state(Low);
 let tx_pin = gpioa.pa2.into_alternate();
     
 let mut tx = dp.USART2.tx(
@@ -47,6 +48,7 @@ let address = VL53L5CX_DEFAULT_I2C_ADDRESS;
 let mut sensor_top = Vl53l5cx::new_i2c(
     RefCellDevice::new(&i2c_bus), 
         lpn_pin,
+        i2c_rst_pin,
         tim_top
     ).unwrap();
 
