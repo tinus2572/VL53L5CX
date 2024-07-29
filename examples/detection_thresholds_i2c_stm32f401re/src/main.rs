@@ -116,7 +116,7 @@ fn main() -> ! {
     
     let _pwr_pin: Pin<'B', 0, Output> = gpiob.pb0.into_push_pull_output_in_state(High);
     let lpn_pin: Pin<'B', 4, Output> = gpiob.pb4.into_push_pull_output_in_state(High);
-    let _i2c_rst_pin: Pin<'B', 3, Output> = gpiob.pb3.into_push_pull_output_in_state(Low);
+    let i2c_rst_pin: Pin<'B', 3, Output> = gpiob.pb3.into_push_pull_output_in_state(Low);
     let tx_pin: Pin<'A', 2, Alternate<7>> = gpioa.pa2.into_alternate();
     
     let mut int_pin: Pin<'A', 4> = gpioa.pa4.into_input().internal_pull_up(true);
@@ -166,6 +166,7 @@ fn main() -> ! {
     let mut sensor = Vl53l5cx::new_i2c(
         RefCellDevice::new(&i2c_bus), 
             lpn_pin,
+            i2c_rst_pin,
             tim_top
         ).unwrap();
 
